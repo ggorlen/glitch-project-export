@@ -12,8 +12,7 @@
   "homepage": "https://github.com/potch/glitch-project-export",
   "author": "Potch",
   "license": "ISC",
-  "dependencies": {
-    "fs-extra": "^8.1.0",
-    "node-fetch": "^2.6.0"
+  "engines": {
+    "node": ">=18"
   }
 }

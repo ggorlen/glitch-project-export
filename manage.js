@@ -1,7 +1,6 @@
 #! /usr/bin/env node
 
-const fetch = require("node-fetch");
-const fs = require("fs-extra");
+const fs = require("fs");
 const readline = require("readline");
 const { spawn } = require("child_process");
 
@@ -27,6 +26,12 @@ async function buildProjectList() {
   let page = await fetch(
     `${GLITCH_API}/v1/users/by/login/projects?limit=100&login=${user}`
   ).then((r) => r.json());
+
+  if (!page.items || !page.items.length) {
+    console.log(`No projects found for user '${user}'`);
+    process.exit(1);
+  }
+
   projects.push(...page.items.map((project) => project.domain));
   while (page.hasMore) {
     console.log("fetching more projects...");
@@ -38,7 +43,7 @@ async function buildProjectList() {
 
 async function init() {
   if (fs.existsSync(CACHE_PATH)) {
-    dataCache = JSON.parse(fs.readFileSync(CACHE_PATH).toString("utf-8"));
+    dataCache = JSON.parse(fs.readFileSync(CACHE_PATH, "utf-8"));
   }
 
   switch (command) {
